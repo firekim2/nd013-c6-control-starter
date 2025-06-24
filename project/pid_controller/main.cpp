@@ -303,7 +303,7 @@ int main ()
           
           double headingAngle = 0.0;
           if(x_points[0] - x_position != 0) {
-            headingAngle = std::atan((y_points[1] - y_position) / (x_points[1] - x_position))
+            headingAngle = std::atan((y_points[1] - y_position) / (x_points[1] - x_position));
           }
           else {
             if(y_points[0] - y_position > 0) {
