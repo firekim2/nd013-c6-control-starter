@@ -300,20 +300,31 @@ int main ()
           /**
           * TODO (step 3): compute the steer error (error_steer) from the position and the desired trajectory
           **/
-          int target_index = 3;
+          int target_index = 0;
           double heading_angle = 0.0;
-          if(x_points[0] - x_position != 0) {
-            heading_angle = std::atan((y_points[target_index] - y_position) / (x_points[target_index] - x_position));
-          }
-          else {
-            if(y_points[0] - y_position > 0) {
-              heading_angle = M_PI_2;
+          
+          for(int i = 0; i < x_points.size(); i++)
+          {
+            double _heading_angle = 0;
+            if(x_points[i] - x_position != 0) {
+              _heading_angle = std::atan((y_points[i] - y_position) / (x_points[i] - x_position));
             }
             else {
-              heading_angle = -M_PI_2;
+              if(y_points[i] - y_position > 0) {
+                _heading_angle = M_PI_2;
+              }
+              else {
+                _heading_angle = -M_PI_2;
+              }
+            }
+            
+            if(abs(_heading_angle - yaw) < M_PI / 4){
+              heading_angle = _heading_angle;
+              target_index = i;
+              break;
             }
           }
-
+          
           error_steer = heading_angle - yaw;
 
           /**
