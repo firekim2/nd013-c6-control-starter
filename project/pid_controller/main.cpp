@@ -195,6 +195,17 @@ void set_obst(vector<double> x_points, vector<double> y_points, vector<State>& o
 	obst_flag = true;
 }
 
+double normalize_angle(double angle) {
+    if (std::abs(angle) > M_PI)
+    {
+        if(angle > M_PI)
+            angle -= 2*M_PI;
+        if(angle < -M_PI)
+            angle += 2*M_PI;
+        return angle;
+    }
+}
+
 int main ()
 {
   cout << "starting server" << endl;
@@ -229,19 +240,6 @@ int main ()
 
   PID pid_throttle = PID();
   pid_throttle.Init(0.2, 0.0009, 0.1, 1.0, -1.0);
-
-  double normalize_angle(double angle)
-{
-    if (std::abs(angle) > M_PI)
-    {
-        std::cout << "Renormalizing angle" <<  std::endl;
-        if(angle > M_PI)
-            angle -= 2*M_PI;
-        if(angle < -M_PI)
-            angle += 2*M_PI;
-        return angle;
-    }
-}
 
   h.onMessage([&pid_steer, &pid_throttle, &new_delta_time, &timer, &prev_timer, &i, &prev_timer](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode)
   {
