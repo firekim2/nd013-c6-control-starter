@@ -225,9 +225,10 @@ int main ()
   **/
 
   PID pid_steer = PID();
-  pid_steer.Init(0.20, 0.001, 0.50, 1.2, -1.2);
+  pid_steer.Init(0.3, 0.01, 0.7, 1.2, -1.2);
+
   PID pid_throttle = PID();
-  pid_throttle.Init(0.20, 0.001, 0.02, 1.0, -1.0);
+  pid_throttle.Init(0.2, 0.001,0.02, 1, -1);
 
   h.onMessage([&pid_steer, &pid_throttle, &new_delta_time, &timer, &prev_timer, &i, &prev_timer](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode)
   {
@@ -300,32 +301,19 @@ int main ()
           /**
           * TODO (step 3): compute the steer error (error_steer) from the position and the desired trajectory
           **/
-          int target_index = 0;
-          double heading_angle = 0.0;
           
-          for(int i = 0; i < x_points.size(); i++)
-          {
-            double _heading_angle = 0;
-            if(x_points[i] - x_position != 0) {
-              _heading_angle = std::atan((y_points[i] - y_position) / (x_points[i] - x_position));
-            }
-            else {
-              if(y_points[i] - y_position > 0) {
-                _heading_angle = M_PI_2;
+          int target_index = -1;
+          double closest_distance = std::numeric_limits<double>::infinity();
+          for (int i=0; i<x_points.size(); i++){
+            double distance = std::sqrt( std::pow(x_points[i]-x_position, 2) + std::pow(y_points[i]-y_position, 2) );
+              if (distance < closest_distance){
+                closest_distance = distance;
+                target_index = i;
               }
-              else {
-                _heading_angle = -M_PI_2;
-              }
-            }
-            
-            if(abs(_heading_angle - yaw) < M_PI / 4){
-              heading_angle = _heading_angle;
-              target_index = i;
-              break;
-            }
-          }
-          
-          error_steer = heading_angle - yaw;
+
+          double desired_yaw = angle_between_points(x_position,y_position,x_points[closest_waypoint],y_points[closest_waypoint]);
+
+          error_steer = desired_yaw - yaw;
 
           /**
           * TODO (step 3): uncomment these lines
