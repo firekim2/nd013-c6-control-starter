@@ -221,9 +221,8 @@ int main ()
   file_throttle.open("throttle_pid_data.txt", std::ofstream::out | std::ofstream::trunc);
   file_throttle.close();
 
-  time_t prev_timer;
-  time_t timer;
-  time(&prev_timer);
+  auto prev_timer = std::chrono::high_resolution_clock::now();
+  auto timer = std::chrono::high_resolution_clock::now();
 
   // initialize pid steer
   /**
@@ -290,9 +289,11 @@ int main ()
           path_planner(x_points, y_points, v_points, yaw, velocity, goal, is_junction, tl_state, spirals_x, spirals_y, spirals_v, best_spirals);
 
           // Save time and compute delta time
-          time(&timer);
-          new_delta_time = difftime(timer, prev_timer);
           prev_timer = timer;
+          timer = std::chrono::high_resolution_clock::now();
+
+          std::chrono::duration<double> dt = timer - prev_timer;
+          new_delta_time = dt.count();
 
           ////////////////////////////////////////
           // Steering control
