@@ -301,15 +301,17 @@ int main ()
           /**
           * TODO (step 3): compute the steer error (error_steer) from the position and the desired trajectory
           **/
+          double heading_angle = 0.0;
           
           int target_index = -1;
           double closest_distance = std::numeric_limits<double>::infinity();
           for (int i=0; i<x_points.size(); i++){
             double distance = std::sqrt( std::pow(x_points[i]-x_position, 2) + std::pow(y_points[i]-y_position, 2) );
-              if (distance < closest_distance){
-                closest_distance = distance;
-                target_index = i;
-              }
+            if (distance < closest_distance){
+              closest_distance = distance;
+              target_index = i;
+            }
+          }
 
           double desired_yaw = angle_between_points(x_position,y_position,x_points[closest_waypoint],y_points[closest_waypoint]);
 
