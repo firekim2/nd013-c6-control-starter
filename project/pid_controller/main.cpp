@@ -300,21 +300,21 @@ int main ()
           /**
           * TODO (step 3): compute the steer error (error_steer) from the position and the desired trajectory
           **/
-          
-          double headingAngle = 0.0;
+          int target_index = 3;
+          double heading_angle = 0.0;
           if(x_points[0] - x_position != 0) {
-            headingAngle = std::atan((y_points[1] - y_position) / (x_points[1] - x_position));
+            heading_angle = std::atan((y_points[target_index] - y_position) / (x_points[target_index] - x_position));
           }
           else {
             if(y_points[0] - y_position > 0) {
-              headingAngle = M_PI_2;
+              heading_angle = M_PI_2;
             }
             else {
-              headingAngle = -M_PI_2;
+              heading_angle = -M_PI_2;
             }
           }
 
-          error_steer = headingAngle - yaw;
+          error_steer = heading_angle - yaw;
 
           /**
           * TODO (step 3): uncomment these lines
@@ -344,7 +344,7 @@ int main ()
 
           // Compute error of speed
           // Since first element of v_points is the nearest point in the path_planner
-          double error_throttle = v_points[1] - velocity;
+          double error_throttle = v_points[target_index] - velocity;
           /**
           * TODO (step 2): compute the throttle error (error_throttle) from the position and the desired speed
           **/
