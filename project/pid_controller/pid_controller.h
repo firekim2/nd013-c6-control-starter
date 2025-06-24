@@ -17,7 +17,9 @@ public:
     /*
     * Errors
     */
-    double error;
+    double cte;
+    double prev_cte;
+    double int_cte;
     /*
     * Coefficients
     */
