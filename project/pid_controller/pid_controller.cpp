@@ -48,6 +48,13 @@ double PID::TotalError() {
    */
 
     double control = - Kp * cte - Kd * (cte - prev_cte) - Ki * int_cte;
+    if (control > output_lim_max){
+      return output_lim_max;
+    }
+    if (control < output_lim_min){
+      return output_lim_min;
+    }
+    
     return control;
 }
 
