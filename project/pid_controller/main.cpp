@@ -313,7 +313,7 @@ int main ()
             }
           }
 
-          double desired_yaw = angle_between_points(x_position,y_position,x_points[closest_waypoint],y_points[closest_waypoint]);
+          double desired_yaw = angle_between_points(x_position,y_position,x_points[target_index],y_points[target_index]);
 
           error_steer = desired_yaw - yaw;
 
